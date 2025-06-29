@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Plataforma de Feedback</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cadastro de Usuário</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Produtos</a></li>
+                    <li><a href="login.html" id="nav-login">Login</a></li>
+                    <li><a href="register.html" id="nav-register">Cadastre-se</a></li>
+                    <li><a href="admin.html" id="nav-admin" style="display:none;">Admin</a></li>
+                    <li><a href="#" id="nav-logout" style="display:none;">Sair</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <form id="register-form">
+            <div class="form-group">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Tipo de Conta:</label>
+                <select id="role" name="role">
+                    <option value="comum">Usuário Comum</option>
+                    <option value="admin">Administrador</option>
+                </select>
+            </div>
+            <div id="register-message" class="message" style="display:none;"></div>
+            <div class="form-group">
+                <button type="submit">Cadastrar</button>
+            </div>
+            <p>Já tem conta? <a href="login.html">Faça login aqui.</a></p>
+        </form>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica para alternar links de navegação com base no login
+            const user = auth.getUser();
+            if (user) {
+                document.getElementById('nav-login').style.display = 'none';
+                document.getElementById('nav-register').style.display = 'none';
+                document.getElementById('nav-logout').style.display = 'inline';
+                if (user.role === 'admin') {
+                    document.getElementById('nav-admin').style.display = 'inline';
+                }
+            } else {
+                document.getElementById('nav-login').style.display = 'inline';
+                document.getElementById('nav-register').style.display = 'inline';
+                document.getElementById('nav-logout').style.display = 'none';
+                document.getElementById('nav-admin').style.display = 'none';
+            }
+
+            document.getElementById('nav-logout').addEventListener('click', (e) => {
+                e.preventDefault();
+                auth.clearAuthData();
+                auth.redirectToHome();
+            });
+
+            // Lógica de cadastro
+            document.getElementById('register-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').value; // 'comum' ou 'admin'
+
+                try {
+                    await api.auth.register(name, email, password, role);
+                    auth.showMessage('register-message', 'Usuário cadastrado com sucesso! Você pode fazer login agora.', 'success');
+                    // Opcional: Redirecionar para a página de login após o cadastro
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                } catch (error) {
+                    auth.showMessage('register-message', error.message || 'Erro ao cadastrar usuário.', 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

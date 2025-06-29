@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - Plataforma de Feedback</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Painel de Administração</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Produtos</a></li>
+                    <li><a href="login.html" id="nav-login" style="display:none;">Login</a></li>
+                    <li><a href="register.html" id="nav-register" style="display:none;">Cadastre-se</a></li>
+                    <li><a href="admin.html" id="nav-admin">Admin</a></li>
+                    <li><a href="#" id="nav-logout">Sair</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="admin-section">
+            <h2>Moderação de Feedbacks</h2>
+            <div id="admin-message" class="message" style="display:none;"></div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Usuário</th>
+                        <th>Avaliação</th>
+                        <th>Comentário</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-feedbacks-body">
+                    <tr><td colspan="7">Carregando feedbacks...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Lógica para alternar links de navegação com base no login
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = auth.getUser();
+            if (user) {
+                document.getElementById('nav-login').style.display = 'none';
+                document.getElementById('nav-register').style.display = 'none';
+                document.getElementById('nav-logout').style.display = 'inline';
+                if (user.role === 'admin') {
+                    document.getElementById('nav-admin').style.display = 'inline';
+                }
+            } else {
+                document.getElementById('nav-login').style.display = 'inline';
+                document.getElementById('nav-register').style.display = 'inline';
+                document.getElementById('nav-logout').style.display = 'none';
+                document.getElementById('nav-admin').style.display = 'none';
+            }
+
+            document.getElementById('nav-logout').addEventListener('click', (e) => {
+                e.preventDefault();
+                auth.clearAuthData();
+                auth.redirectToHome();
+            });
+        });
+    </script>
+</body>
+</html>
