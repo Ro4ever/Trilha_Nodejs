@@ -84,3 +84,9 @@ Inclui algumas das principais:
 
 * `eslint`
 * `eslint-config-next`
+
+## Prints
+
+![Captura de tela 2025-06-29 001735](https://github.com/user-attachments/assets/784620ee-cf69-48db-951d-01d174126dab)
+![Captura de tela 2025-06-29 001619](https://github.com/user-attachments/assets/a5734ea3-175d-496e-9561-e14a58f05930)
+![Captura de tela 2025-06-29 001702](https://github.com/user-attachments/assets/3866bdf1-e8f9-441b-bbf7-16c49bb8186b)
